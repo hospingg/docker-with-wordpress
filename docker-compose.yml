@@ -26,34 +26,19 @@ services:
         networks:
             - app-network
 
-    # MySQL database service
     db:
-        platform: linux/amd64
-        image: mysql:5.7
-        container_name: mysql-db
+        image: mariadb:10.2
+        container_name: db
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_USER: ${DB_USERNAME}
             MYSQL_PASSWORD: ${DB_PASSWORD}
-        env_file:
-            - ./.env
         networks:
             - app-network
-
-    mariadb:
-        image: mariadb:10.2
-        container_name: mariadb
-        environment:
-            MYSQL_ROOT_PASSWORD: changeme
-            MYSQL_DATABASE: mybb
-            MYSQL_USER: mybb
-            MYSQL_PASSWORD: changeme
-        networks:
-            - app-network
-        restart: on-failure
+        restart: always
         volumes:
-            - ${PWD}/mariadb:/var/lib/mysql
+            - ${PWD}/db:/var/lib/mysql
 
     # Nginx service
     nginx:
